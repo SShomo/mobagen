@@ -6,7 +6,7 @@
 Vector2f SeparationRule::computeForce(const std::vector<Boid*>& neighborhood, Boid* boid) {
   // Try to avoid boids too close
   Vector2f separatingForce = Vector2f::zero();
-
+//sum then divide
   //    float desiredDistance = desiredMinimalDistance;
   //
   //    // todo: implement a force that if neighbor(s) enter the radius, moves the boid away from it/them
