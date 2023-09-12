@@ -12,17 +12,23 @@ Vector2f AlignmentRule::computeForce(const std::vector<Boid*>& neighborhood, Boi
     for(int x = 0; x < neighborhood.size(); x++)
     {
       auto temp = boid->getPosition() - neighborhood[x]->getPosition();
-      auto tempsr= sqrt(temp.x + temp.y);
+      auto tempsr= sqrt(pow(temp.x, 2.f) + pow(temp.y, 2.f));
 
-      if(tempsr >= boid->getDetectionRadius())
+      if(tempsr <= boid->getDetectionRadius())
       {
-        averageVelocity += neighborhood[x]->getPosition();
+        averageVelocity += neighborhood[x]->getVelocity();
         neighSize++;
       }
     }
     averageVelocity += boid->getVelocity();
     averageVelocity /= neighSize + 1.0f;
+    auto temp = boid->getVelocity() - averageVelocity;
+    auto tempsr= sqrt(pow(temp.x, 2.f) + pow(temp.y, 2.f));
+    if(tempsr != 0)
+    {
+      averageVelocity = (averageVelocity / tempsr) *tempsr;
+    }
   }
 
-  return Vector2f::normalized(averageVelocity);
+    return Vector2f::normalized(averageVelocity);
 }
