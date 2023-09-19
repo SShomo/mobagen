@@ -19,31 +19,35 @@ void JohnConway::Step(World& world) {
           world.SetNext(p, false);
       }
       else
-      {
         if(neighbors == 3)
           world.SetNext(p, true);
-      }
     }
   }
 }
 
 int JohnConway::CountNeighbors(World& world, Point2D point) {
   int neighbors = 0;
+  int size = world.SideSize();
+  int north = (size + point.y - 1) % size;
+  int south = (size + point.y + 1) % size;
+  int east = (size + point.x + 1) % size;
+  int west = (size + point.x - 1) % size;
+
   if(world.Get(point.Up()))
-    neighbors++;
-  if(world.Get(point.Down()))
     neighbors++;
   if(world.Get(point.Left()))
     neighbors++;
   if(world.Get(point.Right()))
     neighbors++;
-  if(world.Get(point.Left() + point.Up()))
+  if(world.Get(point.Down()))
     neighbors++;
-  if(world.Get(point.Right() + point.Up()))
+  if(world.Get(Point2D(east, north)))
     neighbors++;
-  if(world.Get(point.Left() + point.Down()))
+  if(world.Get(Point2D(west, north)))
     neighbors++;
-  if(world.Get(point.Right() + point.Down()))
+  if(world.Get(Point2D(east, south)))
+    neighbors++;
+  if(world.Get(Point2D(west, south)))
     neighbors++;
 
   return neighbors;
