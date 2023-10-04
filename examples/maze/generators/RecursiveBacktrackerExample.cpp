@@ -6,9 +6,9 @@
 bool RecursiveBacktrackerExample::Step(World* w) {
   Color32 _red = Color32(255, 0, 0, 255);
   Color32 _black = Color32(0, 0, 0, 255);
+  Color32 _green = Color32(0, 170, 0, 255);
   Point2D currentPos;
   std::vector<Point2D> numNeigh;
-
   if(stack.empty())
   {
     currentPos = randomStartPoint(w);
@@ -79,17 +79,19 @@ std::vector<Point2D> RecursiveBacktrackerExample::getVisitables(World* w, const 
   auto sideOver2 = w->GetSize() / 2;
   std::vector<Point2D> visitables;
 
-  if(p.y > -10 && !visited[p.x][p.y - 1]) // check north
-    visitables.push_back(Point2D(p.x, p.y - 1));
+  if(p.x < sideOver2 + 1 && p.y < sideOver2 + 1 && p.x > -11 && p.y > -11)
+  {
+    if(p.y > -10 && !visited[p.x][p.y - 1]) // check north
+      visitables.push_back(Point2D(p.x, p.y - 1));
 
-  if(p.x + 1 <= sideOver2 && !visited[p.x + 1][p.y]) //check east
-    visitables.push_back(Point2D(p.x + 1, p.y));
+    if(p.x + 1 <= sideOver2 && !visited[p.x + 1][p.y]) //check east
+      visitables.push_back(Point2D(p.x + 1, p.y));
 
-  if(p.y + 1 <= sideOver2 && !visited[p.x][p.y + 1])// check south
-    visitables.push_back(Point2D(p.x, p.y + 1));
+    if(p.y + 1 <= sideOver2 && !visited[p.x][p.y + 1])// check south
+      visitables.push_back(Point2D(p.x, p.y + 1));
 
-  if(p.x > -10 && !visited[p.x - 1][p.y]) //check west
-    visitables.push_back(Point2D(p.x - 1, p.y));
-
+    if(p.x > -10 && !visited[p.x - 1][p.y]) //check west
+      visitables.push_back(Point2D(p.x - 1, p.y));
+  }
   return visitables;
 }
