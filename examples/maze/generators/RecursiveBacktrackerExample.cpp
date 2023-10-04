@@ -4,14 +4,13 @@
 #include <climits>
 
 bool RecursiveBacktrackerExample::Step(World* w) {
-  Color32 _red = Color32(255, 0, 0, 255);
+  Color32 _red = Color32(255, 0, 0, 255);//colors
   Color32 _black = Color32(0, 0, 0, 255);
-  Color32 _green = Color32(0, 170, 0, 255);
   Point2D currentPos;
   std::vector<Point2D> numNeigh;
-  if(stack.empty())
+  if(stack.empty())// if the stack is empty get the
   {
-    currentPos = randomStartPoint(w);
+    currentPos =  Point2D(-10,-10);
     stack.push_back(currentPos);
   }else{
     currentPos.x = stack.back().x;
