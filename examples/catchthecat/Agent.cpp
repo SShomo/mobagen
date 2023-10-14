@@ -11,20 +11,24 @@ std::vector<Point2D> Agent::generatePath(World* w){
   unordered_map<Point2D, bool> visited; // use .at() to get data, if the element dont exist [] will give you wrong results
   vector<Point2D> path;
 
-  Point2D temp;
-
   // bootstrap state
   auto catPos = w->getCat();
   frontier.push(catPos);
-  frontierSet.insert(catPos);
+  //frontierSet.insert(catPos);
   Point2D borderExit = {INT_MAX, INT_MAX}; // if at the end of the loop we dont find a border, we have to return random points
 
   while (!frontier.empty()){
     // get the current from frontier
-    Point2D current = frontier.back();
+    Point2D current = frontier.front();
     frontier.pop();
-    // remove the current from frontierset
-    frontierSet.erase(current);
+
+     // remove the current from frontierset
+     frontierSet.insert(current);
+     if(w->catWinsOnSpace(current)) {
+         borderExit = current;
+         break;
+     }
+
     // mark current as visited
     visited[current] = true;
     // getVisitableNeighbors(world, current) returns a vector of neighbors that are not visited, not cat, not block, not in the queue
@@ -32,7 +36,7 @@ std::vector<Point2D> Agent::generatePath(World* w){
     // iterate over the neighs:
     for(auto var : neigh)
     {
-      if(frontierSet.find(var) != frontierSet.end())
+      if(frontierSet.find(var) == frontierSet.end())
       {
         cameFrom[var]= current; // for every neighbor set the cameFrom
                                 // enqueue the neighbors to frontier and frontierset
@@ -41,24 +45,22 @@ std::vector<Point2D> Agent::generatePath(World* w){
 
         visited[var] = true;
         // do this up to find a visitable border and break the loop
-
-        current = var;
-        temp = var;
       }
-
-      if(w->catWinsOnSpace(var))
-        break;
     }
   }
   // if the border is not infinity, build the path from border to the cat using the camefrom map
-  if(borderExit != Point2D(INT_MAX, INT_MAX))
-  {
-    path.emplace_back(cameFrom[temp]);
-  }
-  if(cameFrom.empty())  // if there isnt a reachable border, just return empty vector
+  if(borderExit == Point2D(INT_MAX, INT_MAX))
   {
     return path;
   }
+
+  Point2D current = borderExit;
+  while(current != catPos)
+  {
+      path.push_back(current);
+      current = cameFrom[current];
+  }
+  //path.push_back(catPos);
   return path;
   // if your vector is filled from the border to the cat, the first element is the catcher move, and the last element is the cat move
 }

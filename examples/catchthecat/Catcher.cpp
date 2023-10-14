@@ -3,11 +3,17 @@
 
 Point2D Catcher::Move(World* world) {
   auto side = world->getWorldSideSize() / 2;
-  for (;;) {
-    std::vector<Point2D> path = generatePath(world);
-    //Point2D p = {Random::Range(-side, side), Random::Range(-side, side)};
-    Point2D p = path.front();
+  std::vector<Point2D> path = generatePath(world);
+  int temp = 1;
+  Point2D p = path.front();
+    for (;;) {
     auto cat = world->getCat();
-    if (cat.x != p.x && cat.y != p.y && !world->getContent(p)) return p;
+    if (cat != p)
+        return p;
+    else
+    {
+        p = path[temp];
+        temp += 1;
+    }
   }
 }

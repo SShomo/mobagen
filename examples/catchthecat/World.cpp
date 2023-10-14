@@ -77,7 +77,7 @@ Point2D World::SW(const Point2D& p) {
 
 bool World::isValidPosition(const Point2D& p) {
   auto sideOver2 = sideSize / 2;
-  return (p.x >= -sideOver2) && (p.x <= sideOver2) && (p.y <= sideOver2) && (p.y >= -sideOver2);
+  return (p.x >= -sideOver2) && (p.x <= sideOver2) && (p.y <= sideOver2) && (!getContent(p));
 }
 
 bool World::isNeighbor(const Point2D& p1, const Point2D& p2) {

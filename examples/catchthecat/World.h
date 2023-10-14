@@ -67,7 +67,7 @@ public:
 
   // the top left (x,y) is (-side/2,-side/2) the center is on (0,0);
   // get the content of a given point
-  bool getContent(const Point2D& p) const { return worldState[(p.y + sideSize / 2) * (sideSize) + p.x + sideSize / 2]; }
+  bool getContent(const Point2D& p) const { return worldState[(p.y + sideSize / 2) * (sideSize) + (p.x + sideSize / 2)]; }
 
   // the top left (x,y) is (-5,-5) the center is on (0,0);
   // get the content of a given
