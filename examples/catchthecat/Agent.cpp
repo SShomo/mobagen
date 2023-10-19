@@ -4,41 +4,62 @@
 #include <queue>
 #include "World.h"
 using namespace std;
+
+struct Node{
+  Point2D point;
+  int cost_so_far;
+  int border = 0;
+
+  bool operator>(const Node& o) const
+  {
+    return cost_so_far + border > o.cost_so_far + o.border;
+  }
+};
+
 std::vector<Point2D> Agent::generatePath(World* w){
   unordered_map<Point2D, Point2D> cameFrom; // to build the flowfield and build the path
-  queue<Point2D> frontier; // to store next ones to visit
+  priority_queue<Node, vector<Node>, greater<Node>> frontier; // to store next ones to visit
   unordered_set<Point2D> frontierSet; // OPTIMIZATION to check faster if a point is in the queue
   unordered_map<Point2D, bool> visited; // use .at() to get data, if the element dont exist [] will give you wrong results
   vector<Point2D> path;
 
-  // bootstrap state
+  // bootstrap
+  Node t;
+
   auto catPos = w->getCat();
-  frontier.push(catPos);
+  t.point = catPos;
+  t.cost_so_far = 0;
+
+  frontier.push(t);
   //frontierSet.insert(catPos);
   Point2D borderExit = {INT_MAX, INT_MAX}; // if at the end of the loop we dont find a border, we have to return random points
 
   while (!frontier.empty()){
     // get the current from frontier
-    Point2D current = frontier.front();
+    Node current;
+    current.point = frontier.top().point;
+    current.cost_so_far = frontier.top().cost_so_far;
     frontier.pop();
 
      // remove the current from frontierset
-     frontierSet.insert(current);
-     if(w->catWinsOnSpace(current)) {
-         borderExit = current;
+     frontierSet.insert(current.point);
+     if(w->catWinsOnSpace(current.point)) {
+         borderExit = current.point;
          break;
      }
 
     // mark current as visited
     visited[current] = true;
     // getVisitableNeighbors(world, current) returns a vector of neighbors that are not visited, not cat, not block, not in the queue
-    vector<Point2D> neigh = getVisitableNeighbors(w, current);
+    vector<Point2D> neigh = getVisitableNeighbors(w, current.point);
     // iterate over the neighs:
     for(auto var : neigh)
     {
       if(frontierSet.find(var) == frontierSet.end())
       {
-        cameFrom[var]= current; // for every neighbor set the cameFrom
+        //int e = cost
+        //if(frontierSet.find(var))
+        cameFrom[var] = current.point; // for every neighbor set the cameFrom
                                 // enqueue the neighbors to frontier and frontierset
         frontier.emplace(var);
         frontierSet.emplace(var);
