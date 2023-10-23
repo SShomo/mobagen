@@ -31,7 +31,7 @@ std::vector<Point2D> Agent::generatePath(World* w){
   t.cost_so_far = 0;
 
   frontier.push(t);
-  //frontierSet.insert(catPos);
+  frontierSet.insert(catPos);
   Point2D borderExit = {INT_MAX, INT_MAX}; // if at the end of the loop we dont find a border, we have to return random points
 
   while (!frontier.empty()){
@@ -40,9 +40,9 @@ std::vector<Point2D> Agent::generatePath(World* w){
     current.point = frontier.top().point;
     current.cost_so_far = frontier.top().cost_so_far;
     frontier.pop();
+    frontierSet.erase(current.point);
 
      // remove the current from frontierset
-     frontierSet.insert(current.point);
      if(w->catWinsOnSpace(current.point)) {
          borderExit = current.point;
          break;
@@ -61,6 +61,8 @@ std::vector<Point2D> Agent::generatePath(World* w){
         //if(frontierSet.find(var))
         cameFrom[var] = current.point; // for every neighbor set the cameFrom
                                 // enqueue the neighbors to frontier and frontierset
+
+        //if(frontierSet.find(var))
         frontier.emplace(var);
         frontierSet.emplace(var);
 
