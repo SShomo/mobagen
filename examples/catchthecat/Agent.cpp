@@ -21,7 +21,7 @@ std::vector<Point2D> Agent::generatePath(World* w){
   priority_queue<Node, vector<Node>, greater<Node>> frontier; // to store next ones to visit
   unordered_set<Point2D> frontierSet; // OPTIMIZATION to check faster if a point is in the queue
   unordered_map<Point2D, bool> visited; // use .at() to get data, if the element dont exist [] will give you wrong results
-  vector<Point2D> path;
+    vector<Point2D> path;
 
   // bootstrap
   Node t;
